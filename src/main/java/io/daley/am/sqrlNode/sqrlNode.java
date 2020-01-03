@@ -17,15 +17,19 @@
 
 package io.daley.am.sqrlNode;
 
-import static org.forgerock.openam.auth.node.api.SharedStateConstants.PASSWORD;
-import static org.forgerock.openam.auth.node.api.SharedStateConstants.USERNAME;
-
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
 
+import com.sun.identity.authentication.spi.AuthLoginException;
+import com.sun.identity.authentication.spi.InvalidPasswordException;
+import com.sun.identity.idm.*;
 import org.forgerock.openam.annotations.sm.Attribute;
 import org.forgerock.openam.auth.node.api.AbstractDecisionNode;
 import org.forgerock.openam.auth.node.api.Action;
@@ -33,15 +37,14 @@ import org.forgerock.openam.auth.node.api.Node;
 import org.forgerock.openam.auth.node.api.NodeProcessException;
 import org.forgerock.openam.auth.node.api.TreeContext;
 import org.forgerock.openam.core.realms.Realm;
+import org.forgerock.openam.idrepo.ldap.IdentityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.assistedinject.Assisted;
 import com.iplanet.sso.SSOException;
-import com.sun.identity.idm.AMIdentity;
-import com.sun.identity.idm.IdRepoException;
-import com.sun.identity.idm.IdType;
-import com.sun.identity.idm.IdUtils;
+
+import static org.forgerock.openam.auth.node.api.SharedStateConstants.*;
 
 /**
  * A node that checks to see if zero-page login headers have specified username and whether that username is in a group
@@ -56,32 +59,33 @@ public class sqrlNode extends AbstractDecisionNode {
     private final Config config;
     private final Realm realm;
 
+    @Override
+    public Action process(TreeContext context) throws NodeProcessException {
+
+        NameCallback nameCallback = new NameCallback("notused");
+        nameCallback.setName(context.sharedState.get(USERNAME).asString());
+
+        Callback[] callbacks = new Callback[]{nameCallback};
+        Action.ActionBuilder action = goTo(true);
+
+        if (!nameCallback.getName().equalsIgnoreCase("alun")) {
+            action = goTo(false).withErrorMessage("Only Alun is allowed in");
+        }
+
+        return action.replaceSharedState(context.sharedState.copy())
+                .replaceTransientState(context.transientState.copy()).build();
+    }
+
     /**
      * Configuration for the node.
      */
     public interface Config {
         /**
-         * The header name for zero-page login that will contain the identity's username.
+         * Some attribute.
          */
         @Attribute(order = 100)
-        default String usernameHeader() {
-            return "X-OpenAM-Username";
-        }
-
-        /**
-         * The header name for zero-page login that will contain the identity's password.
-         */
-        @Attribute(order = 200)
-        default String passwordHeader() {
-            return "X-OpenAM-Password";
-        }
-
-        /**
-         * The group name (or fully-qualified unique identifier) for the group that the identity must be in.
-         */
-        @Attribute(order = 300)
-        default String groupName() {
-            return "zero-page-login";
+        default String noDefaultAttribute() {
+            return "Alun";
         }
     }
 
@@ -100,8 +104,8 @@ public class sqrlNode extends AbstractDecisionNode {
         this.realm = realm;
     }
 
-    @Override
-    public Action process(TreeContext context) throws NodeProcessException {
+    /*
+    public Action processOld(TreeContext context) throws NodeProcessException {
         boolean hasUsername = context.request.headers.containsKey(config.usernameHeader());
         boolean hasPassword = context.request.headers.containsKey(config.passwordHeader());
 
@@ -125,6 +129,9 @@ public class sqrlNode extends AbstractDecisionNode {
         }
         return goTo(false).build();
     }
+    */
+
+
 
     private boolean isMemberOfGroup(AMIdentity userIdentity, String groupName) {
         try {
