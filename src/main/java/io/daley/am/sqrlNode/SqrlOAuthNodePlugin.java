@@ -19,14 +19,9 @@ package io.daley.am.sqrlNode;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.forgerock.openam.auth.node.api.AbstractNodeAmPlugin;
 import org.forgerock.openam.auth.node.api.Node;
 import org.forgerock.openam.plugins.PluginException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Definition of an <a href="https://backstage.forgerock.com/docs/am/6/apidocs/org/forgerock/openam/auth/node/api/AbstractNodeAmPlugin.html">AbstractNodeAmPlugin</a>. 
@@ -58,7 +53,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * @since AM 5.5.0
  */
-public class sqrlNodePlugin extends AbstractNodeAmPlugin {
+public class SqrlOAuthNodePlugin extends AbstractNodeAmPlugin {
 
 	static private String currentVersion = "1.0.0";
 	
@@ -70,8 +65,8 @@ public class sqrlNodePlugin extends AbstractNodeAmPlugin {
      */
 	@Override
 	protected Map<String, Iterable<? extends Class<? extends Node>>> getNodesByVersion() {
-		return Collections.singletonMap(sqrlNodePlugin.currentVersion, 
-				Collections.singletonList(sqrlNode.class));
+		return Collections.singletonMap(SqrlOAuthNodePlugin.currentVersion,
+				Collections.singletonList(SqrlOAuthNode.class));
 	}
 
     /** 
@@ -119,6 +114,6 @@ public class sqrlNodePlugin extends AbstractNodeAmPlugin {
      */
 	@Override
 	public String getPluginVersion() {
-		return sqrlNodePlugin.currentVersion;
+		return SqrlOAuthNodePlugin.currentVersion;
 	}
 }
