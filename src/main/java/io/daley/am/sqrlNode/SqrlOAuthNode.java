@@ -51,7 +51,7 @@ import org.forgerock.openam.auth.nodes.oauth.AbstractSocialAuthLoginNode;
  * SQRL OAUTH Node.
  */
 @Node.Metadata(outcomeProvider = AbstractSocialAuthLoginNode.SocialAuthOutcomeProvider.class,
-        configClass = SqrlOAuthNode.SQRLOAuth2Config.class)
+        configClass = SqrlOAuthNode.SQRLOAuth2Config.class, tags = {"social", "federation"})
 public class SqrlOAuthNode extends AbstractSocialAuthLoginNode {
 
     /**
