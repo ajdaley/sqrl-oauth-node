@@ -161,7 +161,7 @@ public class SqrlOAuthNode extends AbstractSocialAuthLoginNode {
          */
         @Attribute(order = 1200, validators = {RequiredValueValidator.class})
         default String cfgAccountMapperClass() {
-            return "org.forgerock.openam.authentication.modules.common.mapping.JsonAttributeMapper|*|google-";
+            return "org.forgerock.openam.authentication.modules.common.mapping.JsonAttributeMapper|*|sqrl-";
         }
 
         /**
@@ -171,7 +171,7 @@ public class SqrlOAuthNode extends AbstractSocialAuthLoginNode {
         @Attribute(order = 1300, validators = {RequiredValueValidator.class})
         default Set<String> cfgAttributeMappingClasses() {
             return singleton("org.forgerock.openam.authentication.modules.common.mapping."
-                    + "JsonAttributeMapper|iplanet-am-user-alias-list|google-");
+                    + "JsonAttributeMapper|iplanet-am-user-alias-list|sqrl-");
         }
 
         /**
@@ -180,7 +180,7 @@ public class SqrlOAuthNode extends AbstractSocialAuthLoginNode {
          */
         @Attribute(order = 1400, validators = {RequiredValueValidator.class})
         default Map<String, String> cfgAccountMapperConfiguration() {
-            return singletonMap("fullName", "cn");
+            return singletonMap("id", "iplanet-am-user-alias-list");
         }
 
         /**
@@ -190,6 +190,7 @@ public class SqrlOAuthNode extends AbstractSocialAuthLoginNode {
         @Attribute(order = 1500, validators = {RequiredValueValidator.class})
         default Map<String, String> cfgAttributeMappingConfiguration() {
             final Map<String, String> attributeMappingConfiguration = new HashMap<>();
+            attributeMappingConfiguration.put("id", "iplanet-am-user-alias-list");
             attributeMappingConfiguration.put("firstName", "givenName");
             attributeMappingConfiguration.put("lastName", "sn");
             attributeMappingConfiguration.put("email", "mail");
