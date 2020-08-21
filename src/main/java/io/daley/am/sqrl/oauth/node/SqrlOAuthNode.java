@@ -13,7 +13,7 @@
  *
  * Copyright 2017-2020 ForgeRock AS.
  */
-package io.daley.am.sqrlNode;
+package io.daley.am.sqrl.oauth.node;
 
 import java.net.URI;
 import java.util.Collections;
@@ -32,6 +32,7 @@ import org.forgerock.openam.auth.node.api.NodeProcessException;
 import org.forgerock.openam.auth.node.api.OutputState;
 import org.forgerock.openam.auth.nodes.oauth.ProfileNormalizer;
 import org.forgerock.openam.auth.nodes.oauth.SocialOAuth2Helper;
+import org.forgerock.openam.identity.idm.IdentityUtils;
 import org.forgerock.openam.sm.annotations.adapters.Password;
 import org.forgerock.openam.sm.validation.URLValidator;
 
@@ -232,9 +233,9 @@ public class SqrlOAuthNode extends AbstractSocialAuthLoginNode {
 
     @Inject
     public SqrlOAuthNode(@Assisted SqrlOAuthNode.SQRLOAuth2Config config, SocialOAuth2Helper authModuleHelper,
-            ProfileNormalizer profileNormalizer) throws NodeProcessException {
+                         ProfileNormalizer profileNormalizer, IdentityUtils identityUtils) throws NodeProcessException {
         super(config, authModuleHelper, authModuleHelper.newOAuthClient(getOAuthClientConfiguration(config)),
-                profileNormalizer);
+                profileNormalizer, identityUtils);
     }
 
     private static OAuthClientConfiguration getOAuthClientConfiguration(SqrlOAuthNode.SQRLOAuth2Config config) {

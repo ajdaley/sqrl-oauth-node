@@ -20,7 +20,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sqrlNode</artifactId>
+    <artifactId>sqrl-oauth-node</artifactId>
 
     <groupId>io.daley.am</groupId>
     <version>1.0.0-SNAPSHOT</version>    
@@ -28,7 +28,7 @@
     <description>An Authentication Tree Node for ForgeRock's Identity Platform</description>
 
     <properties>
-        <am.version>7.0.0-SNAPSHOT</am.version>
+        <am.version>7.1.0-SNAPSHOT</am.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,6 +68,16 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
 
     <repositories>
         <repository>

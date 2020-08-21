@@ -14,7 +14,7 @@
  * Copyright 2017-2019 ForgeRock AS.
  */
 
-package io.daley.am.sqrlNode;
+package io.daley.am.sqrl.oauth.node;
 
 import java.util.Collections;
 import java.util.Map;
